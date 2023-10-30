@@ -89,17 +89,38 @@ app.get("/api/v1/products", async (req, res) => {
     const result = await Product.find();
     res.status(200).json({
       status: "success",
+      message: "Get all data successfully",
       data: result,
     });
   } catch (error) {
     res.status(400).json({
       status: "failed",
       message: error.message,
+      data: {},
     });
   }
 });
 
-app.post("/api/v1/products", async (req, res, next) => {
+app.get("/api/v1/product", async (req, res) => {
+  try {
+    const result = await Product.find({ _id: "653f863ad1f880080cb8fa46" });
+    // const result = await Product.findById("653f863ad1f880080cb8fa46");
+
+    res.status(200).json({
+      status: "success",
+      message: "Successfully data found",
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "failed",
+      message: "Data not found",
+      data: {},
+    });
+  }
+});
+
+app.post("/api/v1/product", async (req, res, next) => {
   try {
     const product = new Product(req.body);
 
