@@ -6,6 +6,7 @@ const cors = require("cors");
 app.use(express.json());
 app.use(cors());
 
+// -----------Product Schema-----------
 const productSchema = mongoose.Schema(
   {
     name: {
@@ -27,7 +28,7 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
       enum: {
-        value: ["kg", "pcs", "litre"],
+        values: ["kg", "pcs", "litre"],
         message: "Unit must be kg/litre/pcs",
       },
     },
@@ -51,31 +52,71 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
       enum: {
-        value: ["in-stock", "out-of-stock"],
+        values: ["in-stock", "out-of-stock"],
         message: "Status must be (in-stock/out-of-stock)",
       },
     },
-    supplier: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Supplier",
-    },
-    categories: [
-      {
-        name: {
-          type: String,
-          required: true,
-        },
-        _id: mongoose.Schema.Types.ObjectId,
-      },
-    ],
+    // supplier: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "Supplier",
+    // },
+    // categories: [
+    //   {
+    //     name: {
+    //       type: String,
+    //       required: true,
+    //     },
+    //     _id: mongoose.Schema.Types.ObjectId,
+    //   },
+    // ],
   },
   {
     timestamps: true,
   }
 );
 
+// -----------create model-----------
+const Product = mongoose.model("Product", productSchema);
+
+// -----------root route---------
 app.get("/", (req, res) => {
   res.send("Route is working! YaY!");
+});
+
+// -----------all api routes-------------
+app.get("/api/v1/products", async (req, res) => {
+  try {
+    const result = await Product.find();
+    res.status(200).json({
+      status: "success",
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "failed",
+      message: error.message,
+    });
+  }
+});
+
+app.post("/api/v1/products", async (req, res, next) => {
+  try {
+    const product = new Product(req.body);
+
+    const result = await product.save();
+
+    res.status(200).json({
+      status: "success",
+      message: "Data inserted successfully",
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "failed",
+      message: error.message,
+      data: {},
+    });
+  }
 });
 
 module.exports = app;
