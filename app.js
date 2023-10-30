@@ -75,6 +75,22 @@ const productSchema = mongoose.Schema(
   }
 );
 
+// -------------Middlewares-----------
+productSchema.pre("save", function (next) {
+  console.log("Before saving data.");
+  next();
+});
+
+// productSchema.post("save", function (doc, next) {
+//   console.log("After saving data");
+//   next();
+// });
+
+// ----------Instance----------
+productSchema.methods.logger = function () {
+  console.log("This is a instance");
+};
+
 // -----------create model-----------
 const Product = mongoose.model("Product", productSchema);
 
@@ -125,6 +141,8 @@ app.post("/api/v1/product", async (req, res, next) => {
     const product = new Product(req.body);
 
     const result = await product.save();
+
+    // product.logger();
 
     res.status(200).json({
       status: "success",
