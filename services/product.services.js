@@ -17,3 +17,24 @@ exports.createProductService = async (data) => {
   // product.logger();
   return result;
 };
+
+exports.updateProductService = async (productId, data) => {
+  // ------System 01--------
+  const result = await Product.updateOne(
+    { _id: productId },
+    { $set: data },
+    { runValidators: true }
+  );
+
+  // -----System 02-------
+  // const result = await Product.updateOne({ _id: productId }, data, {
+  //   runValidators: true,
+  // });
+
+  // -----System 03-------
+  // const result = await Product.findOneAndUpdate({ _id: productId }, data, {
+  //   new: true,
+  //   runValidators: true,
+  // });
+  return result;
+};
