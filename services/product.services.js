@@ -5,8 +5,8 @@ exports.getProductsService = async () => {
   return products;
 };
 
-exports.getProductService = async () => {
-  const product = await Product.find({ _id: "653f863ad1f880080cb8fa46" });
+exports.getProductService = async (productId) => {
+  const product = await Product.find({ _id: productId });
   // const product = await Product.findById("653f863ad1f880080cb8fa46");
   return product;
 };

@@ -27,7 +27,8 @@ exports.getProducts = async (req, res) => {
 
 exports.getProduct = async (req, res) => {
   try {
-    const result = await productServices.getProductService();
+    const { id } = req.params;
+    const result = await productServices.getProductService(id);
 
     res.status(200).json({
       status: "success",

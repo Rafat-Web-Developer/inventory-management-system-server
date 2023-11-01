@@ -7,10 +7,13 @@ router
   .get(productController.getProducts)
   .post(productController.createProduct);
 
-router.route("/singleProduct").get(productController.getProduct);
 router
   .route("/bulk-update")
   .patch(productController.bulkUpdateProductsController);
-router.route("/:id").patch(productController.updateProductController);
+
+router
+  .route("/:id")
+  .get(productController.getProduct)
+  .patch(productController.updateProductController);
 
 module.exports = router;
