@@ -64,12 +64,29 @@ exports.createProduct = async (req, res, next) => {
 exports.updateProductController = async (req, res) => {
   try {
     const { id } = req.params;
-    const product = await productServices.updateProductService(id, req.body);
+    const result = await productServices.updateProductService(id, req.body);
 
     res.status(200).json({
       ststus: "success",
       message: "Data Updated successfully",
-      data: product,
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "failed",
+      message: error.message,
+    });
+  }
+};
+
+exports.bulkUpdateProductsController = async (req, res) => {
+  try {
+    const result = await productServices.bulkUpdateProductsService(req.body);
+
+    res.status(200).json({
+      ststus: "success",
+      message: "Data Updated successfully",
+      data: result,
     });
   } catch (error) {
     res.status(400).json({

@@ -38,3 +38,20 @@ exports.updateProductService = async (productId, data) => {
   // });
   return result;
 };
+
+exports.bulkUpdateProductsService = async (data) => {
+  // ------Update simller data for all ids-----
+  // const result = await Product.updateMany({ _id: data.ids }, data.data, {
+  //   runValidators: true,
+  // });
+
+  // ------Update difference data for all ids------
+  const allPromise = [];
+
+  data.products.forEach((product) => {
+    allPromise.push(Product.updateOne({ _id: product.id }, product.data));
+  });
+
+  const result = Promise.all(allPromise);
+  return result;
+};
