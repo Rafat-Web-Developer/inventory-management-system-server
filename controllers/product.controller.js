@@ -96,3 +96,58 @@ exports.bulkUpdateProductsController = async (req, res) => {
     });
   }
 };
+
+exports.deleteProductController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await productServices.deleteProductService(id);
+    if (!result.deletedCount) {
+      return res.status(400).json({
+        status: "failed",
+        message: "Can't delete product",
+      });
+    }
+    res.status(200).json({
+      status: "success",
+      message: "Product deleted successfully",
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "failed",
+      message: error.message,
+    });
+  }
+};
+
+exports.bulkDeleteProductsController = async (req, res) => {
+  try {
+    const result = await productServices.bulkDeleteProductsService(req.body);
+    res.status(200).json({
+      status: "success",
+      message: "Products deleted successfully",
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "failed",
+      message: error.message,
+    });
+  }
+};
+
+exports.deleteAllProductsController = async (req, res) => {
+  try {
+    const result = await productServices.deleteAllProductsService();
+    res.status(200).json({
+      status: "success",
+      message: "Products deleted successfully",
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "failed",
+      message: error.message,
+    });
+  }
+};
