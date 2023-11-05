@@ -16,7 +16,7 @@ exports.getProducts = async (req, res) => {
 
     filters = JSON.parse(
       JSON.stringify(filters).replace(
-        /\bgt|lt|gte|lte\b/,
+        /\bgt|lt|gte|lte\b/g,
         (match) => `$${match}`
       )
     );
