@@ -10,7 +10,30 @@ const productServices = require("../services/product.services");
  */
 exports.getProducts = async (req, res) => {
   try {
-    const result = await productServices.getProductsService();
+    let filters = { ...req.query };
+    let excludingItems = ["sort", "limit", "select"];
+    excludingItems.forEach((excludingItem) => delete filters[excludingItem]);
+
+    filters = JSON.parse(
+      JSON.stringify(filters).replace(
+        /\bgt|lt|gte|lte\b/,
+        (match) => `$${match}`
+      )
+    );
+
+    let queries = {};
+    if (req.query?.sort) {
+      queries.sort = req.query?.sort.split(",").join(" ");
+    }
+    if (req.query?.select) {
+      queries.select = req.query?.select.split(",").join(" ");
+    }
+    if (req.query?.limit) {
+      queries.limit = req.query?.limit;
+    }
+
+    const result = await productServices.getProductsService(filters, queries);
+
     res.status(200).json({
       status: "success",
       message: "Get all data successfully",
